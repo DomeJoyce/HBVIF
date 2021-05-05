@@ -5,7 +5,7 @@ This bioinformatics pipeline was designed to directly extract the HBV-DNA integr
 This pipeline takes as input directly the raw reads, performs the trimming (customizable/skippable), and processes them generating several tab-separated files that can be easily visualized by researchers.
 The pipeline is based on the previous installation of the following software:
 1) trimmomatic (v.0.39)
-2) fastqc
+2) fastqc (v0.11.8)
 3) bwa (>= 0.7.17-r1188)
 4) samtools (v. 1.9)
 5) picard tools (MarkDuplicates v. 2.20.1-SNAPSHOT)
