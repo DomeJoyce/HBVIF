@@ -22,7 +22,7 @@ The pipeline should work also with the most recent version of the above-mentione
 
 IMPORTANT!!!
 After you copy the repository using
-'git clone https://github.com/DomeJoyce/HBVIF.git '
+'git clone https://github.com/DomeJoyce/HBVIF.git'
 
 move into the genome folder and download the Human Genome from ncbi website, following the instruction present in the "prepare_genomes.txt"
 
