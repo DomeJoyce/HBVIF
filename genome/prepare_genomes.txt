@@ -13,3 +13,4 @@ In order to work properly, users needs to download the version of the Human Geno
 'cat GCF_000001405.26_GRCh38_genomic.fna HBV.fa > HG_HBV.fa'
 9) Create the database for blast search with:
 'makeblastdb -input_type fasta -dbtype nucl -in HG_HBV.fa -out HG_HBV'
+Keep in mind that this could take long time, so please be patient!
