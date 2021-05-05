@@ -4,7 +4,8 @@ HBV Integration Finder (HBVIF) pipeline.
 This bioinformatics pipeline was designed to directly extract the HBV-DNA integrated sequences from genomic breakpoints of the host genome (Human Genome).
 This pipeline takes as input directly the raw reads, performs the trimming (customizable/skippable), and processes them generating several tab-separated files that can be easily visualized by researchers.
 
-Dependencies:
+Dependencies
+
 Please be sure that the following software are properly installed on your system.
 The pipeline was designed and tested only on Ubuntu OS (18.04 LTS, 20.04 LTS) machines, using the following versions of softwares:
 1) fastqc (v0.11.8)
