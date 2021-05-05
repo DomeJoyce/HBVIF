@@ -1,0 +1,15 @@
+In order to work properly, users needs to download the version of the Human Genome from the NCBI website.
+1) Go to https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.26/
+2) On the upper right corner of the web page click on the blue botton "Download Assembly"
+3) Select as Source database "RefSeq", then select the File type "Genomic FASTA (.fna), and click Download (Estimated size is 946.1 MB)
+4) Move the file in the folder $HBVIF/genome/
+5) Extract the genome_assemblies_genome_fasta.tar using the following command:
+'tar -xvf genome_assemblies_genome_fasta.tar'
+6) Move the file into the $HBVIF/genome/ folder typing:
+'mv ncbi-genomes-*/GCF_000001405.26_GRCh38_genomic.fna.gz ./'
+7) Decompress the genome with:
+'gunzip GCF_000001405.26_GRCh38_genomic.fna.gz'
+8) Merge the human genome with the viral genome using the following command:
+'cat GCF_000001405.26_GRCh38_genomic.fna HBV.fa > HG_HBV.fa'
+9) Create the database for blast search with:
+'makeblastdb -input_type fasta -dbtype nucl -in HG_HBV.fa -out HG_HBV'
