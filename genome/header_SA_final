@@ -1,0 +1,1 @@
+chr	start	end	reads	cov	features	start_features	end_features	strand_features	Descriptions	coordinates_closest_gene	strand_closest_gene	closest_gene_name	distance_chimera/closest_gene	HBV_chr	start_HBV	end_HBV	start_on_chimera	end_on_chimera	HG_chr	start_HG	end_HG	start_on_chimera	end_on_chimera	seq HBV	seq HG	chimeras	MH_start_on_chimera	MH_end_on_chimera	MH_seq
