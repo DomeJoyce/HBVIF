@@ -1,0 +1,14 @@
+NC_003977.2	.	preS1/preS2/S	1	513	.	+	.	ID=preS1/preS2/S
+NC_003977.2	.	A-determinant	514	664	.	+	.	ID=A-determinant;Note=region of S protein involved in detection of hepatitis B surface antigen (HbsAg)
+NC_003977.2	.	preS1/preS2/S	665	837	.	+	.	ID=preS1/preS2/S
+NC_003977.2	.	pol	838	949	.	+	.	ID=pol
+NC_003977.2	.	ENH1/promoterX	950	1356	.	+	.	ID=ENH1/promoterX
+NC_003977.2	.	pol	1357	1375	.	+	.	ID=pol
+NC_003977.2	.	X	1376	1592	.	+	.	ID=X
+NC_003977.2	.	X/ENH2/BCP	1593	1852	.	+	.	ID=X/ENH2/BCP
+NC_003977.2	.	PreCore/Core	1853	2454	.	+	.	ID=PreCore/Core
+NC_003977.2	.	pol	2455	2706	.	+	.	ID=pol
+NC_003977.2	.	promoterPreS1	2707	2818	.	+	.	ID=promoterPreS1
+NC_003977.2	.	pol	2819	2849	.	+	.	ID=pol
+NC_003977.2	.	preS1/preS2/S	2850	3182	.	+	.	ID=preS1/preS2/S
+
