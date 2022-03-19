@@ -1,6 +1,9 @@
 # HBVIF
 HBV Integration Finder (HBVIF) pipeline.
 
+
+![alt text](https://github.com/DomeJoyce/HBVIF/blob/master/HBVIF_22.drawio.png?raw=true)
+
 This bioinformatics pipeline was designed to directly extract the HBV-DNA integrated sequences from genomic breakpoints of the host genome (Human Genome).
 This pipeline takes as input directly the raw reads, performs the trimming (customizable/skippable), and processes them generating several tab-separated files that can be easily visualized by researchers.
 
