@@ -405,7 +405,7 @@ if [[ $RETURN_CODE -ne 0 ]]; then
 	echo "Generating SA_for_MonteCarlo.bed file failed at line 402. Exiting..." >&2
 	exit $RETURN_CODE
 fi
-### aggiungiamo nel bed, nella 4 colonna, un numero progressivo separatoda ";", che utilizzeremo per creare un hash successivo ### 
+### adding in the 4 column of the bed file a progressive number. This will be our hash after### 
 echo $LBLUE "### Preparing for integration site-specific chimera reconstruction ###" $Z
 mkdir -p reads_per_assembly
 awk 'BEGIN {FS="\t"; OFS="\t"} {split($4,a,";"); print a[2] > "./reads_per_assembly/"a[1]".txt"}' SA_primary_secondary_no_HBV.bed
@@ -428,7 +428,6 @@ for f in *.info ; do rm "$f"; done
 ls *.assembly* | paste - - | while read line; do awk '{split(FILENAME,a,"."); print $0 > a[1]".final_assembly_1.fasta"}' $line ; done
 for f in *.contigs; do rm "$f"; done
 for f in *singlets ; do rm "$f"; done
-### ripetiamo questo ciclo 2 volte per assicurarci che venga ricostruita la sequenza ###
 echo -e $CYAN " Running the second round of assembly per integration site event (using CAP3) ###" $Z
 
 ls *.final_assembly_1.fasta | while read line; do cap3 $line -x "assembly_2"; done
@@ -471,12 +470,6 @@ ls *.fasta | while read line; do
 	echo $line", which is the integration event "$COUNTER" out of "$numberOfSamples
 	blastn -task blastn-short -dust no -soft_masking false -word_size 7 -num_threads $threads -max_target_seqs 2000 -db ../../genome/HG_HBV -query $line -outfmt 6 -penalty -3 -reward 2 -gapopen 5 -gapextend 2 | awk 'BEGIN {FS="\t";OFS = "\t"} {print $2,$9,$10,$7,$8}' > $line.intermediate.blast.out
 done
-## Dato che si è interrotto al file 3001.1.last.fasta perchè aveva 2 righe di AAAA..., ho editato manualmente il fasta ed ho rilanciato la pipeline come segue
-# nano new_list_to_continue
-# numberOfBlastRemaining=$(cat new_list_to_continue | wc -l)
-# COUNTER=0
-# cat new_list_to_continue | while read line; do let COUNTER+=1; echo $line", which is the integration event "$COUNTER" out of "$numberOfBlastRemaining; blastn -task blastn-short -dust no -soft_masking false -word_size 7 -num_threads 3 -max_target_seqs 2000 -db ../../genome/HG_HBV -query $line -outfmt 6 -penalty -3 -reward 2 -gapopen 5 -gapextend 2 | awk 'BEGIN {FS="\t";OFS = "\t"} {print $2,$9,$10,$7,$8}' > $line.intermediate.blast.out ; done
-## così da terminare i blast e procedere poi con la pipeline
 echo -e $LRED "## Collecting and sorting BLAST results ###" $Z
 
 ls *.intermediate.blast.out | while read line; do grep "$virus" $line | head -n 1 > $line.HBV; done
@@ -509,14 +502,14 @@ mkdir -p integrations_with_sequences/
 mv *.final_breakpoints.tab ./integrations_with_sequences/
 cd integrations_with_sequences/
 ls *.tab | while read line; do awk 'BEGIN {FS=="\t"; OFS=="\t"}{split(FILENAME,a,"."); print a[1]"."a[2]"\t"$0 > a[1]"."a[2]".table_to_append"}' $line; done
-echo -e $LBLUE " genero il file contenente tutte le integrazioni insieme " $Z
+echo -e $LBLUE " merging all integrations together " $Z
 cat *.table_to_append > final_dataset_to_append.tab
 cp ../../../../SA_primary_secondary_no_HBV.bed ./
 
 awk 'BEGIN{FS="\t"; OFS="\t"}{split($4,a,";"); print $1,$2,$3,a[2],$5,a[1]}' SA_primary_secondary_no_HBV.bed > SA_primary_secondary_no_HBV_for_hash.bed 
 awk 'BEGIN{FS="\t"; OFS="\t"}{if(FILENAME=="final_dataset_to_append.tab") {split($1,a,".") ; if (var[a[1]]=="") {var[a[1]]=$0} else {var[a[1]]=var[a[1]]"\t"$0}} else {print $1,$2,$3,$4,$5,var[$6]}}' final_dataset_to_append.tab SA_primary_secondary_no_HBV_for_hash.bed | awk 'BEGIN{FS="\t"; OFS="\t"}{split($6,a,"."); cols=$7 ; for (i=8;i<=NF;i++) {cols=cols"\t"$i} ; print $1,$2,$3,a[1]";"$4,$5,cols}' > SA_with_sequences.tab
 
-### Interseco i risultati con l'annotazione ### 
+echo -e $YELLOW "Intersecting results with the genome annotation" 
 
 mkdir -p Final_Results
 cp SA_primary_secondary_no_HBV.bed Final_Results/
