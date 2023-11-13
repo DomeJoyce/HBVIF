@@ -79,7 +79,7 @@ else
                 output=$(readlink -f $1)
                 ;;
             --skip-trimming)
-                skiptrimming=1
+                skipTrimming=1
                 ;;
             --trimmomatic)
 				shift
@@ -135,7 +135,7 @@ fi
 
 echo -e $YELLOW "########## Cleaning reads with Trimmomatic ##########" $Z
 
-if [[ $skiptrimming -eq 0 ]]; then
+if [[ $skipTrimming -eq 0 ]]; then
 	java -jar $TRIM/trimmomatic.jar PE -threads $threads R1.fq.gz R2.fq.gz R1_paired_sw_$trimmingwindow_$trimmingquality.fq.gz R1_unpair_sw_$trimmingwindow_$trimmingquality.fq.gz R2_paired_sw_$trimmingwindow_$trimmingquality.fq.gz R2_unpair_sw_$trimmingwindow_$trimmingquality.fq.gz ILLUMINACLIP:$adapt:2:30:10 SLIDINGWINDOW:$trimmingwindow:$trimmingquality MINLEN:$trimmingminlen
 	RETURN_CODE=$(echo $?)
 	if [[ $RETURN_CODE -ne 0 ]]; then
