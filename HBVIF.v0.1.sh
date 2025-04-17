@@ -445,13 +445,13 @@ echo -e $RED "###  Running the last round of assembly pr integration site event 
 for i in *assembly_2.fasta*; do echo $i; cd-hit -i $i -o $i".cdhit.fasta"; done
 
 for f in *.clstr ; do rm "$f"; done
-ls *.cdhit.fasta | paste - - | while read line; do awk '{split(FILENAME,a,"."); print $0 > a[1]".final_assembly_3.fasta"}' $line ; done
+for f in $(*.cdhit.fasta | paste - -); do awk '{split(FILENAME,a,"."); print $0 > a[1]".final_assembly_3.fasta"}' $f ; done
 
-for i in *.final_assembly_3.fasta; do echo $i; awk '{if (/^>/) {f++} ; split(FILENAME,a,".") ; print > a[1]"."f".last.fasta"}' $i ; done
+for f in *.final_assembly_3.fasta; do echo $f; awk '{if (/^>/) {f++} ; split(FILENAME,a,".") ; print > a[1]"."f".last.fasta"}' $f ; done
 
 mkdir -p final_assembled_to_blast
 
-mv *.last.fasta final_assembled_to_blast/
+for f in *.last.fasta; do mv $f final_assembled_to_blast/ ; done
 
 cd final_assembled_to_blast/
 
@@ -465,27 +465,27 @@ echo -e $RED "########## Performing BLAST iteration per integration site #######
 echo -e LCYAN "This can take very long time, depending on the total number of integration sites found. Please be patient" $Z
 numberOfSamples=$(ls *.fasta | wc -l)
 COUNTER=0
-ls *.fasta | while read line; do
+for i in *.fasta ; do
 	let COUNTER+=1 
-	echo $line", which is the integration event "$COUNTER" out of "$numberOfSamples
-	blastn -task blastn-short -dust no -soft_masking false -word_size 7 -num_threads $threads -max_target_seqs 2000 -db ../../genome/HG_HBV -query $line -outfmt 6 -penalty -3 -reward 2 -gapopen 5 -gapextend 2 | awk 'BEGIN {FS="\t";OFS = "\t"} {print $2,$9,$10,$7,$8}' > $line.intermediate.blast.out
+	echo $i", which is the integration event "$COUNTER" out of "$numberOfSamples
+	blastn -task blastn-short -dust no -soft_masking false -word_size 7 -num_threads $threads -max_target_seqs 2000 -db ../../genome/HG_HBV -query $i -outfmt 6 -penalty -3 -reward 2 -gapopen 5 -gapextend 2 | awk 'BEGIN {FS="\t";OFS = "\t"} {print $2,$9,$10,$7,$8}' > $i.intermediate.blast.out
 done
 echo -e $LRED "## Collecting and sorting BLAST results ###" $Z
 
-ls *.intermediate.blast.out | while read line; do grep "$virus" $line | head -n 1 > $line.HBV; done
+for f in *.intermediate.blast.out ; do grep "$virus" $f | head -n 1 > $f.HBV; done
 
-ls *.intermediate.blast.out | while read line; do E=$(echo $line | cut -f1 -d "."); C=$(cat ../../SA_primary_secondary_no_HBV.bed | awk -F '\t' -v E=$E '{split($4,a,";");if(a[1]==E) print $1}'); S=$(cat ../../SA_primary_secondary_no_HBV.bed | awk -F '\t' -v E=$E '{split($4,a,";");if(a[1]==E) print $2}');F=$(cat ../../SA_primary_secondary_no_HBV.bed | awk -F '\t' -v E=$E '{split($4,a,";");if(a[1]==E) print $3}'); awk -F '\t' -v C="$C" -v S="$S" -v F="$F" '{if($1==C && $2>=S-100 && $3<=F+100) print $0}' $line | head -n1 > $line.HUMAN; done
+for line in *.intermediate.blast.out ; do E=$(echo $line | cut -f1 -d "."); C=$(cat ../../SA_primary_secondary_no_HBV.bed | awk -F '\t' -v E=$E '{split($4,a,";");if(a[1]==E) print $1}'); S=$(cat ../../SA_primary_secondary_no_HBV.bed | awk -F '\t' -v E=$E '{split($4,a,";");if(a[1]==E) print $2}');F=$(cat ../../SA_primary_secondary_no_HBV.bed | awk -F '\t' -v E=$E '{split($4,a,";");if(a[1]==E) print $3}'); awk -F '\t' -v C="$C" -v S="$S" -v F="$F" '{if($1==C && $2>=S-100 && $3<=F+100) print $0}' $line | head -n1 > $line.HUMAN; done
 
-ls *intermediate.blast.out.* | paste - - | while read line; do awk '{split(FILENAME,a,"."); print $0 > a[1]"."a[2]".final.blast.out"}' $line; done
+for line in $(*intermediate.blast.out.* | paste - -); do awk '{split(FILENAME,a,"."); print $0 > a[1]"."a[2]".final.blast.out"}' $line; done
 
-ls *.final.blast.out | while read line; do paste -s $line > $line".one_line"; done
+for line in *.final.blast.out ; do paste -s $line > "$line".one_line; done
 
 mkdir -p intermediate_results
 
-mv *.blast.out ./intermediate_results/
+for i in *.blast.out ; do mv $i ./intermediate_results/ ; done
 
-mv *.blast.out.HBV ./intermediate_results/
-mv *.blast.out.HUMAN ./intermediate_results/
+for i in *.blast.out.HBV ; do mv $i ./intermediate_results/ ; done
+for i in *.blast.out.HUMAN ; do mv $i ./intermediate_results/ ; done
 
 echo -e $LCYAN " Collecting blast human and viral coordinates for each integration breakpoint "$Z
 ls | paste - - > list_for_cicle
